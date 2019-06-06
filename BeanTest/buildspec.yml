@@ -16,6 +16,7 @@ phases:
     commands:
       - echo Build started on `date`
       - dotnet publish -c Release -o ./build_output BeanTest/BeanTest.csproj
+      - cp BeanTest/Dockerfile BeanTest/build_output/Dockerfile
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest BeanTest/build_output
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
