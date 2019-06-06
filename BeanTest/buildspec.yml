@@ -8,7 +8,6 @@ phases:
       - echo Using tooling dotnet version `dotnet --version`
       - echo Restore started on `date`
       - dotnet restore BeanTest/BeanTest.csproj
-      - aws -- version
       - $(aws ecr get-login --no-include-email --region us-east-1)
       - REPOSITORY_URI=614441614596.dkr.ecr.us-east-1.amazonaws.com/identity
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
