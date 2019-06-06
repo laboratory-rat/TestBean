@@ -1,19 +1,24 @@
 ﻿version: 0.2
-
 phases:
+  install:
+    runtime-versions:
+      dotnet: 2.2
   pre_build:
     commands:
-      - echo.Logging in to Amazon ECR...
-      - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - echo Using tooling dotnet version `dotnet --version`
+      - echo Restore started on `date`
+      - dotnet restore BeanTest/BeanTest.csproj
+      - aws -- version
+      - $(aws ecr get-login --no-include-email --region us-east-1)
       - REPOSITORY_URI=614441614596.dkr.ecr.us-east-1.amazonaws.com/identity
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
     commands:
       - echo Build started on `date`
+      - dotnet publish -c Release -o ./build_output BeanTest/BeanTest.csproj
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
+      - docker build -t $REPOSITORY_URI:latest ./build_output
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
@@ -21,3 +26,7 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+artifacts:
+  files:
+    - BeanTest/build_output/**/*
+    - BeanTest/buildspec.yml
