@@ -1,10 +1,10 @@
 {
   "taskDefinition": {
-    "family": "identity",
+    "family": "identity-api",
     "containerDefinitions": [
       {
-        "name": "mr-identity",
-        "image": "012345678910.dkr.ecr.us-west-2.amazonaws.com/hello-world:6a57b99",
+        "name": "identity-api",
+        "image": "614441614596.dkr.ecr.us-east-1.amazonaws.com/identity-api",
         "cpu": 100,
         "portMappings": [
           {
