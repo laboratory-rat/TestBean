@@ -10,7 +10,7 @@ phases:
     commands:
       - echo Using tooling dotnet version `dotnet --version`
       - $(aws ecr get-login --no-include-email --region us-east-1)
-      - REPOSITORY_URI=614441614596.dkr.ecr.us-east-1.amazonaws.com/identity-api:latest
+      - REPOSITORY_URI=614441614596.dkr.ecr.us-east-1.amazonaws.com/identity-api
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
