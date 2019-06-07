@@ -24,6 +24,7 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - cp Config/imagedefinitions.json ./imagedefinitions.json
 artifacts:
   files:
-    - Config/imagedefinitions.json
+    - imagedefinitions.json
