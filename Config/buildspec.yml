@@ -9,8 +9,6 @@ phases:
   pre_build:
     commands:
       - echo Using tooling dotnet version `dotnet --version`
-      - echo Restore started on `date`
-      - dotnet restore BeanTest/BeanTest.csproj
       - $(aws ecr get-login --no-include-email --region us-east-1)
       - REPOSITORY_URI=614441614596.dkr.ecr.us-east-1.amazonaws.com/identity-api:latest
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
@@ -18,10 +16,7 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - dotnet publish -c Release -o ./build_output BeanTest/BeanTest.csproj
-      - cp BeanTest/Dockerfile BeanTest/build_output/Dockerfile
-      - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest BeanTest/build_output
+      - docker build -t $REPOSITORY_URI:latest -f Config/Dockerfile .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
@@ -31,5 +26,4 @@ phases:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
 artifacts:
   files:
-    - BeanTest/build_output/**/*
-    - BeanTest/buildspec.yml
+    - Config/imagedefinitions.json
